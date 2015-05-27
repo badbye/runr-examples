@@ -1,0 +1,44 @@
+---
+title: "Run Python from R"
+output: html_document
+---
+
+First we set up the Python engine.
+```{r}
+library(knitr)
+library(runr)
+py = proc_python(22222)
+py$start()
+knit_engines$set(python = function(options) {
+    knitr:::wrap(py$exec(options$code), options)
+})
+opts_chunk$set(engine='python') 
+# all the codes in the following chunks will be run in pyhton
+```
+
+
+```{r}
+import numpy as np
+a = np.arange(5)
+```
+
+```{r}
+a # return nothing
+```
+
+```{r}
+print a # return values only if you print it
+```
+
+
+```{r}
+def mean(x):
+  return sum(x) / len(x)
+print mean([1, 2, 3, 4, 5])
+```
+
+Do not forget to shut it down in the end.
+```{r}
+py$stop()
+```
+
